@@ -795,7 +795,7 @@ static int load_linux(vm_t *vm, const char *kernel_name, const char *dtb_name, c
     }
 
     /* Set boot arguments */
-    err = vm_set_bootargs(vm, entry, MACH_TYPE, (uint32_t) dtb);
+    err = vm_set_bootargs(vm, entry, MACH_TYPE, dtb);
     if (err) {
         printf("Error: Failed to set boot arguments\n");
         return -1;
