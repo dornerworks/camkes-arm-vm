@@ -106,6 +106,8 @@ seL4_Error WEAK camkes_dtb_get_irq_cap(int irq, seL4_CNode cnode, seL4_Word inde
 simple_get_IRQ_handler_fn original_simple_get_irq_fn;
 int *WEAK camkes_dtb_get_irqs(int *num_irqs);
 
+seL4_CPtr notification_ready_notification(void);
+
 int WEAK virtio_net_notify(vm_t *vm)
 {
     return 0;
@@ -475,7 +477,8 @@ static void map_unity_ram(vm_t *vm)
 
     uintptr_t start;
     reservation_t res;
-    unsigned int bits = seL4_PageBits;
+
+    seL4_Word bits = seL4_PageBits;
     res = vspace_reserve_range_at(&vm->vm_vspace, (void *)(paddr_start - linux_ram_offset), paddr_end - paddr_start,
                                   seL4_AllRights, 1);
     assert(res.res);
@@ -553,7 +556,8 @@ static seL4_CPtr restart_tcb;
 
 static void restart_event(void *arg)
 {
-    restart_event_reg_callback(restart_event, NULL);
+    int err UNUSED;
+    err = restart_event_reg_callback(restart_event, NULL);
     seL4_UserContext context = {
         .pc = (seL4_Word)restart_component,
     };
@@ -795,7 +799,7 @@ static int load_linux(vm_t *vm, const char *kernel_name, const char *dtb_name, c
     }
 
     /* Set boot arguments */
-    err = vm_set_bootargs(vm, entry, MACH_TYPE, dtb);
+    err = vm_set_bootargs(vm, (seL4_Word)entry, MACH_TYPE, (seL4_Word)dtb);
     if (err) {
         printf("Error: Failed to set boot arguments\n");
         return -1;
@@ -831,7 +835,7 @@ int main_continued(void)
         reset_resources();
     }
     restart_tcb = camkes_get_tls()->tcb_cap;
-    restart_event_reg_callback(restart_event, NULL);
+    err = restart_event_reg_callback(restart_event, NULL);
 
     /* install custom open/close/read implementations to redirect I/O from the VMM to
      * our file server */
@@ -938,4 +942,3 @@ int run(void)
     }
     return main_continued();
 }
-
