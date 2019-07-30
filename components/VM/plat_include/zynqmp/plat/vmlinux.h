@@ -166,15 +166,4 @@ static const int linux_pt_irqs[] = {
     INTERRUPT_CORE_VIRT_TIMER,
 };
 
-#define LINUX_RAM_BASE       (0x800000000)
-#define LINUX_RAM_END        (0x810000000)
-#define LINUX_RAM_SIZE       (LINUX_RAM_END - LINUX_RAM_BASE)
-#define LINUX_RAM_PADDR_BASE LINUX_RAM_BASE
-
-/* the offset between actual physcial memory and guest physical memory */
-#define LINUX_RAM_OFFSET  (0)
-#define DTB_ADDR          (LINUX_RAM_BASE + 0x0C000000)
-#define INITRD_MAX_SIZE   0x01900000 //25 MB
-#define INITRD_ADDR       (DTB_ADDR - INITRD_MAX_SIZE) //0x80A700000
-
 #endif /* VMLINUX_H */
