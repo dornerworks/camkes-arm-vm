@@ -846,8 +846,10 @@ int main_continued(void)
     err = vmm_init();
     assert(!err);
 
+    int affinity = get_instance_affinity();
+
     /* Create the VM */
-    err = vm_create(VM_NAME, VM_PRIO, _fault_endpoint, VM_BADGE,
+    err = vm_create(VM_NAME, VM_PRIO, affinity, _fault_endpoint, VM_BADGE,
                     &_vka, &_simple, &_vspace, &_io_ops, &vm);
     if (err) {
         printf("Failed to create VM\n");
