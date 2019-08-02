@@ -715,7 +715,7 @@ void *install_vm_module(vm_t *vm, const char *kernel_name, enum img_type file_ty
     }
     switch (ret_file_type) {
     case IMG_BIN:
-        if (config_set(CONFIG_PLAT_TX1) || config_set(CONFIG_PLAT_TX2)) {
+        if (config_set(CONFIG_PLAT_TX1) || config_set(CONFIG_PLAT_TX2) || config_set(CONFIG_PLAT_ZYNQMP)) {
             /* This is likely an aarch64/aarch32 linux difference */
             load_addr = linux_ram_base + 0x80000;
         } else {

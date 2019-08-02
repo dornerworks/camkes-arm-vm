@@ -1,0 +1,46 @@
+/*
+ * Copyright 2019, DornerWorks
+ *
+ * This software may be distributed and modified according to the terms of
+ * the BSD 2-Clause license. Note that NO WARRANTY is provided.
+ * See "LICENSE_BSD2.txt" for details.
+ *
+ * @TAG(DORNERWORKS_BSD)
+ */
+
+#include <configurations/vm.h>
+
+#define VM_INITRD_MAX_SIZE 0x01900000 //25 MB
+#define VM_RAM_BASE 0x800000000
+#define VM_PADDR_RAM_BASE 0x800000000
+#define VM_RAM_SIZE 0x10000000
+#define VM_RAM_OFFSET 0
+#define VM_DTB_ADDR 0x80C000000
+#define VM_INITRD_ADDR 0x80A700000 //(DTB_ADDR - INITRD_MAX_SIZE)
+
+assembly {
+    composition {}
+    configuration {
+
+        vm0.linux_address_config = {
+            "linux_ram_base" : VAR_STRINGIZE(VM_RAM_BASE),
+            "linux_ram_paddr_base" : VAR_STRINGIZE(VM_PADDR_RAM_BASE),
+            "linux_ram_size" : VAR_STRINGIZE(VM_RAM_SIZE),
+            "linux_ram_offset" : VAR_STRINGIZE(VM_RAM_OFFSET),
+            "dtb_addr" : VAR_STRINGIZE(VM_DTB_ADDR),
+            "initrd_max_size" : VAR_STRINGIZE(VM_INITRD_MAX_SIZE),
+            "initrd_addr" : VAR_STRINGIZE(VM_INITRD_ADDR)
+        };
+
+        vm0.dtb = dtb([{"path": "/serial@ff010000"},
+                          ]);
+
+        vm0.untyped_mmios = [
+            "0xf9060000:12", // Interrupt Controller Virtual CPU interface (Virtual Machine view)
+            ];
+
+        vm0.irqs =  [
+            27, // VTCNT (arch timer)
+            ];
+    }
+}

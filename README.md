@@ -78,3 +78,46 @@ wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf
 iw wlan0 link
 dhclient wlan0
 ```
+
+## zynqmp configuration
+
+One linux binary is provided, built from petalinux 2017.3. Only the secondary serial port is passed
+though to the VM.
+
+### building a new linux image
+
+These instructions assume the user has installed petalinux.
+
+NOTE: Petalinux 2017.4 can cause issues.
+
+First, create a new project using the petalinux BSP:
+
+```
+cd ~
+petalinux-create -t project -s xilinx-zcu102-v2017.3-final.bsp
+cd xilinx-zcu102-2017.3
+```
+
+Next, modify the project so that Linux will start a getty for either serial device. Add the
+following to `project-spec/meta-user/conf/layer.conf`:
+
+```
+require conf/distro/include/console.inc
+```
+
+Now, create the file `project-spec/meta-user/conf/distro/include/console.inc` with the following
+line:
+
+```
+SERIAL_CONSOLES_append = " 115200;ttyPS1"
+```
+
+Now call `petalinux-build` to compile the image. The Linux image should exist in `images/linux/Image`.
+
+At this point, petalinux can be used to add additional modules and other pieces to Linux.
+
+### initializing
+
+```
+../init-build.sh -DCAMKES_VM_APP=vm_minimal -DPLATFORM=zynqmp -DCROSS_COMPILER_PREFIX=aarch64-linux-gnu- -DAARCH64=true
+```
