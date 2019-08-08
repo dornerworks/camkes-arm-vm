@@ -17,6 +17,7 @@ if(NOT "${PLATFORM}" IN_LIST supported)
 endif()
 if(${PLATFORM} STREQUAL "tk1")
     set(KernelArmSMMU ON CACHE BOOL "" FORCE)
+    set(KernelArmSMMUTK1 ON CACHE BOOL "" FORCE)
     set(KernelARMSMMUInterruptEnable ON CACHE BOOL "" FORCE)
 endif()
 
