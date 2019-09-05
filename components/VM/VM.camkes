@@ -46,6 +46,10 @@ component VM {
     maybe consumes restart restart_event;
     has semaphore vm_sem;
 
+#if VMMAPGIC
+    dataport Buf gic_vcpu;
+#endif
+
     maybe uses PutChar putchar;
     maybe uses PutChar guest_putchar;
     maybe uses GetChar serial_getchar; 

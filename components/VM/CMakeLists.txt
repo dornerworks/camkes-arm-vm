@@ -127,6 +127,15 @@ config_option(
     OFF
 )
 
+config_option(
+    VmMapGic
+    VM_MAP_GIC
+    "Map the GIC VCPU interface using a hardware component. This allows the register to be shared between \
+     multiple VMMs"
+    DEFAULT
+    OFF
+)
+
 add_config_library(arm_vm "${configure_string}")
 
 file(GLOB vm_src src/*.c)
