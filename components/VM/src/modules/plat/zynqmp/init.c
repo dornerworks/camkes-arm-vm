@@ -29,27 +29,6 @@ static const struct device *linux_ram_devices[] = {
 
 };
 
-extern void *serial_getchar_buf;
-
-//this matches the size of the buffer in serial server
-#define BUFSIZE 4088
-
-void handle_serial_console()
-{
-    struct {
-        uint32_t head;
-        uint32_t tail;
-        char buf[BUFSIZE];
-    } volatile *buffer = serial_getchar_buf;
-
-    char c;
-    if (buffer->head != buffer->tail) {
-        c = buffer->buf[buffer->head];
-        buffer->head = (buffer->head + 1) % sizeof(buffer->buf);
-        vuart_handle_irq(c);
-    }
-}
-
 static void
 plat_init_module(vm_t* vm, void *cookie)
 {
@@ -77,9 +56,6 @@ plat_init_module(vm_t* vm, void *cookie)
             }
         }
     }
-
-    /* Install vuart */
-    vm_install_vconsole(vm, INTERRUPT_UART1, (struct device *)&dev_uart1, guest_putchar_putchar);
 }
 
 DEFINE_MODULE(plat, NULL, plat_init_module)

@@ -128,6 +128,14 @@ config_option(
 )
 
 config_option(
+    VmVirtUart
+    VM_VIRT_UART
+    "Option for virtualizing console"
+    DEFAULT
+    OFF
+)
+
+config_option(
     VmMapGic
     VM_MAP_GIC
     "Map the GIC VCPU interface using a hardware component. This allows the register to be shared between \
@@ -148,6 +156,10 @@ endif()
 
 if(VmVchan)
     list(APPEND vm_src src/modules/vchan.c)
+endif()
+
+if(VmVirtUart)
+    list(APPEND vm_src src/modules/vuart_init.c)
 endif()
 
 # A module that is expected to exist for each platform but not required.
