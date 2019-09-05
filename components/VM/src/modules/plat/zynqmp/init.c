@@ -22,6 +22,7 @@ seL4_CPtr WEAK camkes_dtb_get_nth_untyped(int n, size_t *size_bits, uintptr_t *p
 static const struct device *linux_pt_devices[] = {
     &dev_uart0,
     &dev_uart1,
+    &dev_gem3,
 };
 
 static const struct device *linux_ram_devices[] = {
