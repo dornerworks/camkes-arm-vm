@@ -160,6 +160,7 @@
 #define INTERRUPT_APU_REGERROR            185
 #define INTERRUPT_CCI                     186
 #define INTERRUPT_SMMU                    187
+
 #define MAX_IRQ                           200
 
 static const int linux_pt_irqs[] = {

@@ -833,6 +833,8 @@ int main_continued(void)
     vm_t vm;
     int err;
 
+    set_putchar(putchar_putchar);
+
     parse_camkes_linux_attributes();
 
     /* setup for restart with a setjmp */

@@ -65,6 +65,7 @@
 
 #define PER_VM_VIRTUAL_SERIAL_CONNECTIONS_DEF(num) \
     connection seL4RPCCall serial_vm##num(from vm##num.putchar, to serial.processed_putchar); \
+    connection seL4RPCCall serial_guest_vm##num(from vm##num.guest_putchar, to serial.raw_putchar); \
     connection seL4SerialServer serial_input_vm##num(from vm##num.serial_getchar, to serial.getchar);
 
 #define VM_VIRTUAL_SERIAL_COMPOSITION_DEF(vm_ids...) \
@@ -82,6 +83,7 @@
 
 #define PER_VM_VIRTUAL_SERIAL_CONFIGURATION_DEF(num) \
     vm##num.putchar_attributes = VAR_STRINGIZE(num); \
+    vm##num.guest_putchar_attributes = VAR_STRINGIZE(num); \
     vm##num.serial_getchar_global_endpoint = VAR_STRINGIZE(vm##num); \
     vm##num.serial_getchar_badge = "4"; \
     vm##num.serial_getchar_attributes = VAR_STRINGIZE(num); \
@@ -90,4 +92,3 @@
 #define VM_VIRTUAL_SERIAL_CONFIGURATION_DEF(vm_ids...) \
     VM_VIRTUAL_SERIAL_GENERAL_CONFIGURATION_DEF() \
     __CALL(PER_VM_VIRTUAL_SERIAL_CONFIGURATION_DEF, vm_ids) \
-
