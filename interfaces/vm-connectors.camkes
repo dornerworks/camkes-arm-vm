@@ -17,3 +17,11 @@ connector seL4VMDTBPassthrough {
     from Procedure template "seL4VMDTBPassthrough-from.template.c" with 0 threads;
     to Procedure template "seL4VMDTBPassthrough-to.template.c";
 }
+
+/**
+* seL4IRQInit
+*/
+connector seL4IRQInit {
+    from Procedures template "seL4IRQInit-from.template.c" with 0 threads;
+    to Procedure template "seL4IRQInit-to.template.c";
+}

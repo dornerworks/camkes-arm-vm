@@ -16,6 +16,7 @@ import <VchanInterface.idl4>;
 import <global-connectors.camkes>;
 import <VirtQueue/VirtQueue.camkes>;
 import <seL4VMDTBPassthrough.idl4>;
+import <IRQInit.idl4>;
 
 import <FileServerInterface.camkes>;
 import <FileServer/FileServer.camkes>;
@@ -49,6 +50,8 @@ component VM {
 #if VMMAPGIC
     dataport Buf gic_vcpu;
 #endif
+
+    maybe uses IRQInitCon irq_init;
 
     maybe uses PutChar putchar;
     maybe uses PutChar guest_putchar;

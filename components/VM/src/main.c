@@ -107,6 +107,7 @@ seL4_CPtr WEAK camkes_dtb_get_nth_untyped(int n, size_t *size_bits, uintptr_t *p
 seL4_Error WEAK camkes_dtb_get_irq_cap(int irq, seL4_CNode cnode, seL4_Word index, uint8_t depth);
 simple_get_IRQ_handler_fn original_simple_get_irq_fn;
 int *WEAK camkes_dtb_get_irqs(int *num_irqs);
+seL4_CPtr WEAK irq_init_get_irq(vka_t *vka, int irq, int affinity);
 
 seL4_CPtr notification_ready_notification(void);
 
@@ -335,16 +336,10 @@ static seL4_Error vm_simple_get_irq(void *data, int irq, seL4_CNode cnode, seL4_
 {
     seL4_Error res;
 
-#if CONFIG_MAX_NUM_NODES > 1
-    /* PPIs have been setup by the capDL loader, running on the boot core.
-     * Since PPIs exist on every core, we need to ensure the IRQ is active on our core
-     */
-    if(IRQ_IS_PPI(irq) && (get_instance_affinity() != DEFAULT_BOOT_CORE)) {
-        res = seL4_IRQControl_Get(simple_get_init_cap(&_simple, seL4_CapIRQControl),
-                                  irq, cnode, index, depth);
-        return res;
+    if(IRQ_IS_PPI(irq) && irq_init_get_irq) {
+        seL4_CPtr irq_idx = irq_init_get_irq(&_vka, irq, get_instance_affinity());
+        return seL4_CNode_Copy(cnode, index, depth, cnode, irq_idx, CONFIG_WORD_SIZE, seL4_AllRights);
     }
-#endif
 
     res = original_simple_get_irq_fn(_simple.data, irq, cnode, index, depth);
     if (res == seL4_NoError) {

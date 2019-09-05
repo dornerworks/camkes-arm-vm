@@ -51,6 +51,7 @@ add_subdirectory(libs/libvirtio)
 # VM components
 add_subdirectory(components/Vchan)
 add_subdirectory(components/VM)
+add_subdirectory(components/IRQInit)
 
 # Add VM application
 add_subdirectory("apps/${CAMKES_VM_APP}")
