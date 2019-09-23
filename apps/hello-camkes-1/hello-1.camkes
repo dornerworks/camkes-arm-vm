@@ -1,0 +1,28 @@
+/* @TAG(DATA61_BSD) */
+
+/*
+ * CAmkES tutorial part 1: components with RPC.
+ */
+
+import <std_connector.camkes>;
+
+import "interfaces/HelloSimple.idl4";
+
+component Client {
+    control;
+    uses HelloSimple hello;
+}
+
+component EchoServer {
+    provides HelloSimple hello;
+}
+
+assembly {
+    composition {
+         component Client client;
+         component EchoServer echo;
+
+        connection seL4RPCCall hello_con(from client.hello, to echo.hello);
+
+    }
+}

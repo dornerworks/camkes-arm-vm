@@ -1,0 +1,4 @@
+/* Simple RPC interface */
+procedure HelloSimple {
+    void say_hello(in string str);
+};
