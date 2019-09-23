@@ -14,8 +14,6 @@ cmake_minimum_required(VERSION 3.8.2)
 
 project(camkes-arm-vm-hello-world C)
 
-ApplyData61ElfloaderSettings(${PLATFORM} arm_hyp)
-
 DeclareCAmkESComponent(Client SOURCES components/Client/src/client.c)
 DeclareCAmkESComponent(EchoServer SOURCES components/Echo/src/echo.c)
 
